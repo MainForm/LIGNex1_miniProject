@@ -4,3 +4,6 @@
 [submodule "Drivers/STMPE811"]
 	path = Drivers/STMPE811
 	url = https://github.com/MainForm/STM32_STMPE811_Driver.git
+[submodule "models/MNIST"]
+	path = models/MNIST
+	url = https://github.com/MainForm/MNIST_Model.git
