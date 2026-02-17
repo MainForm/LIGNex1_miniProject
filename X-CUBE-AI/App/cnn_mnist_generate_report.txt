@@ -1,0 +1,300 @@
+ST Edge AI Core v2.2.0-20266 2adc00962
+Created date          : 2026-02-18 02:50:00
+Parameters            : generate --target stm32f4 --name cnn_mnist -m C:/Users/bkgr4/OneDrive/Documents/VScode/STM32/F429I_DISC1_miniProject/models/MNIST/models/model.onnx --compression none --verbosity 1 --workspace C:/Users/bkgr4/AppData/Local/Temp/mxAI_workspace5732929732860011965868747441251377 --output C:/Users/bkgr4/.stm32cubemx/cnn_mnist_output
+
+Exec/report summary (generate)
+-------------------------------------------------------------------------------------------------------------------------------
+model file         :   C:\Users\bkgr4\OneDrive\Documents\VScode\STM32\F429I_DISC1_miniProject\models\MNIST\models\model.onnx   
+type               :   onnx                                                                                                    
+c_name             :   cnn_mnist                                                                                               
+compression        :   none                                                                                                    
+options            :   allocate-inputs, allocate-outputs                                                                       
+optimization       :   balanced                                                                                                
+target/series      :   stm32f4                                                                                                 
+workspace dir      :   C:\Users\bkgr4\AppData\Local\Temp\mxAI_workspace5732929732860011965868747441251377                      
+output dir         :   C:\Users\bkgr4\.stm32cubemx\cnn_mnist_output                                                            
+model_fmt          :   float                                                                                                   
+model_name         :   model                                                                                                   
+model_hash         :   0x054cb875ef15604850834cf7957e4097                                                                      
+params #           :   1,441 items (5.63 KiB)                                                                                  
+-------------------------------------------------------------------------------------------------------------------------------
+input 1/1          :   'input', f32(1x28x28x1), 3.06 KBytes, activations                                                       
+output 1/1         :   'output', f32(1x10), 40 Bytes, activations                                                              
+macc               :   324,461                                                                                                 
+weights (ro)       :   5,636 B (5.50 KiB) (1 segment) / -128(-2.2%) vs float model                                             
+activations (rw)   :   28,260 B (27.60 KiB) (1 segment) *                                                                      
+ram (total)        :   28,260 B (27.60 KiB) = 28,260 + 0 + 0                                                                   
+-------------------------------------------------------------------------------------------------------------------------------
+(*) 'input'/'output' buffers are allocated in the activations buffer
+
+Model name - model
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+m_id   layer (type,original)                                            oshape                param/size        macc                     connected to   | c_size            c_macc               c_type                 
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+12     fc1_weight (Placeholder, Gemm)                                   [b:16,c:49]           784/3,136                                                 | +64(+2.0%)        +800(+100.0%)        Dense_[7]              
+       fc1_bias (Placeholder, Gemm)                                     [b:16]                16/64                                                     | -64(-100.0%)                           
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+15     fc2_weight (Placeholder, Gemm)                                   [b:10,c:16]           160/640                                                   | +40(+6.2%)        +170(+100.0%)        Dense_[9]              
+       fc2_bias (Placeholder, Gemm)                                     [b:10]                10/40                                                     | -40(-100.0%)                           
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+0      input (Input, )                                                  [b:1,h:28,w:28,c:1]                                                             |                                        
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+1      _conv1_Conv_output_0 (Conv2D, Conv)                              [b:1,h:28,w:28,c:8]   80/320          56,456                            input   |                                        Conv2D_[0]             
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+2      _relu_LeakyRelu_output_0 (Nonlinearity, LeakyRelu)               [b:1,h:28,w:28,c:8]                    6,272             _conv1_Conv_output_0   |                   +12,544(+200.0%)     Nonlinearity_[1]       
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+3      _conv2_Conv_output_0 (Conv2D, Conv)                              [b:1,h:28,w:28,c:4]   292/1,168      225,796         _relu_LeakyRelu_output_0   | -1,168(-100.0%)   -225,796(-100.0%)    
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+4      _relu_1_LeakyRelu_output_0 (Nonlinearity, LeakyRelu)             [b:1,h:28,w:28,c:4]                    3,136             _conv2_Conv_output_0   |                   -3,136(-100.0%)      
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+5      _pooling_AveragePool_output_0 (Pool, AveragePool)                [b:1,h:14,w:14,c:4]                    3,136       _relu_1_LeakyRelu_output_0   | +1,168(+100.0%)   +235,204(+7500.1%)   Conv2D_[2]             
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+6      _bn2d_1_BatchNorma..n_output_0 (ScaleBias, BatchNormalization)   [b:1,h:14,w:14,c:4]   8/32             1,568    _pooling_AveragePool_output_0   |                                        ScaleBias_[3]          
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+7      _conv3_Conv_output_0 (Conv2D, Conv)                              [b:1,h:14,w:14,c:1]   37/148           7,057   _bn2d_1_BatchNorma..n_output_0   | -148(-100.0%)     -7,057(-100.0%)      
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+8      _relu_2_LeakyRelu_output_0 (Nonlinearity, LeakyRelu)             [b:1,h:14,w:14,c:1]                      196             _conv3_Conv_output_0   |                   -196(-100.0%)        
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+9      _pooling_1_Average..l_output_0 (Pool, AveragePool)               [b:1,h:7,w:7,c:1]                        196       _relu_2_LeakyRelu_output_0   | +148(+100.0%)     +7,645(+3900.5%)     Conv2D_[4]             
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+10     _bn2d_2_BatchNorma..n_output_0 (ScaleBias, BatchNormalization)   [b:1,h:7,w:7,c:1]     2/8                 98   _pooling_1_Average..l_output_0   |                                        ScaleBias_[5]          
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+11     _flatten_Flatten_output_0 (Reshape, Flatten)                     [b:1,c:49]                                     _bn2d_2_BatchNorma..n_output_0   |                   +24(+100.0%)         Transpose_[6]          
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+12     _fc1_Gemm_output_0 (Gemm, Gemm)                                  [b:1,c:16]                               800        _flatten_Flatten_output_0   |                   -800(-100.0%)        
+                                                                                                                                           fc1_weight   | 
+                                                                                                                                             fc1_bias   | 
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+13     _relu_3_LeakyRelu_output_0 (Nonlinearity, LeakyRelu)             [b:1,c:16]                                16               _fc1_Gemm_output_0   |                   +32(+200.0%)         Nonlinearity_[8]       
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+14     _bn1d_1_BatchNorma..n_output_0 (ScaleBias, BatchNormalization)   [b:1,c:16]            32/128              32       _relu_3_LeakyRelu_output_0   | -128(-100.0%)     -32(-100.0%)         
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+15     _fc2_Gemm_output_0 (Gemm, Gemm)                                  [b:1,c:10]                               170   _bn1d_1_BatchNorma..n_output_0   |                   -170(-100.0%)        
+                                                                                                                                           fc2_weight   | 
+                                                                                                                                             fc2_bias   | 
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+16     _relu_4_LeakyRelu_output_0 (Nonlinearity, LeakyRelu)             [b:1,c:10]                                10               _fc2_Gemm_output_0   |                   +20(+200.0%)         Nonlinearity_[10]      
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+17     _bn1d_2_BatchNorma..n_output_0 (ScaleBias, BatchNormalization)   [b:1,c:10]            20/80               20       _relu_4_LeakyRelu_output_0   |                                        ScaleBias_[11]         
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+18     output_softmax (Nonlinearity, LogSoftmax)                        [b:1,c:10]                               150   _bn1d_2_BatchNorma..n_output_0   |                                        Nonlinearity_[12]      
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+19     output (Nonlinearity, LogSoftmax)                                [b:1,c:10]                               100                   output_softmax   |                                        Nonlinearity_[o][13]   
+------ ---------------------------------------------------------------- --------------------- ------------ --------- -------------------------------- --- ----------------- -------------------- ---------------------- 
+model/c-model: macc=305,209/324,461 +19,252(+6.3%) weights=5,764/5,636 -128(-2.2%) activations=--/28,260 io=--/0
+
+
+
+Generated C-graph summary
+------------------------------------------------------------------------------------------------------------------------
+model name            : model
+c-name                : cnn_mnist
+c-node #              : 14
+c-array #             : 36
+activations size      : 28260 (1 segment)
+weights size          : 5636 (1 segment)
+macc                  : 324461
+inputs                : ['input_output']
+outputs               : ['output_output']
+
+C-Arrays (36)
+------ -------------------------------------------- ------------ ------------------------- ------------- --------- 
+c_id   name (*_array)                               item/size    domain/mem-pool           c-type        comment   
+------ -------------------------------------------- ------------ ------------------------- ------------- --------- 
+0      _bn1d_2_BatchNormalization_output_0_bias     10/40        weights/weights           const float             
+1      _bn1d_2_BatchNormalization_output_0_output   10/40        activations/**default**   float                   
+2      _bn1d_2_BatchNormalization_output_0_scale    10/40        weights/weights           const float             
+3      _bn2d_1_BatchNormalization_output_0_bias     4/16         weights/weights           const float             
+4      _bn2d_1_BatchNormalization_output_0_output   784/3136     activations/**default**   float                   
+5      _bn2d_1_BatchNormalization_output_0_scale    4/16         weights/weights           const float             
+6      _bn2d_2_BatchNormalization_output_0_bias     1/4          weights/weights           const float             
+7      _bn2d_2_BatchNormalization_output_0_output   49/196       activations/**default**   float                   
+8      _bn2d_2_BatchNormalization_output_0_scale    1/4          weights/weights           const float             
+9      _conv1_Conv_output_0_bias                    8/32         weights/weights           const float             
+10     _conv1_Conv_output_0_output                  6272/25088   activations/**default**   float                   
+11     _conv1_Conv_output_0_scratch0                9/36         activations/**default**   float                   
+12     _conv1_Conv_output_0_weights                 72/288       weights/weights           const float             
+13     _conv2_Conv_output_0_bias                    4/16         weights/weights           const float             
+14     _conv2_Conv_output_0_output                  784/3136     activations/**default**   float                   
+15     _conv2_Conv_output_0_scratch0                72/288       activations/**default**   float                   
+16     _conv2_Conv_output_0_scratch1                224/896      activations/**default**   float                   
+17     _conv2_Conv_output_0_weights                 288/1152     weights/weights           const float             
+18     _conv3_Conv_output_0_bias                    1/4          weights/weights           const float             
+19     _conv3_Conv_output_0_output                  49/196       activations/**default**   float                   
+20     _conv3_Conv_output_0_scratch0                36/144       activations/**default**   float                   
+21     _conv3_Conv_output_0_scratch1                28/112       activations/**default**   float                   
+22     _conv3_Conv_output_0_weights                 36/144       weights/weights           const float             
+23     _fc1_Gemm_output_0_bias                      16/64        weights/weights           const float             
+24     _fc1_Gemm_output_0_output                    16/64        activations/**default**   float                   
+25     _fc1_Gemm_output_0_weights                   784/3136     weights/weights           const float             
+26     _fc2_Gemm_output_0_bias                      10/40        weights/weights           const float             
+27     _fc2_Gemm_output_0_output                    10/40        activations/**default**   float                   
+28     _fc2_Gemm_output_0_weights                   160/640      weights/weights           const float             
+29     _flatten_Flatten_output_0_to_chlast_output   49/196       activations/**default**   float                   
+30     _relu_3_LeakyRelu_output_0_output            16/64        activations/**default**   float                   
+31     _relu_4_LeakyRelu_output_0_output            10/40        activations/**default**   float                   
+32     _relu_LeakyRelu_output_0_output              6272/25088   activations/**default**   float                   
+33     input_output                                 784/3136     activations/**default**   float         /input    
+34     output_output                                10/40        activations/**default**   float         /output   
+35     output_softmax_output                        10/40        activations/**default**   float                   
+------ -------------------------------------------- ------------ ------------------------- ------------- --------- 
+
+C-Layers (14)
+------ ------------------------------------- ---- --------------- -------- ------ ----------------------------------------------- --------------------- 
+c_id   name (*_layer)                        id   layer_type      macc     rom    tensors                                         shape (array id)      
+------ ------------------------------------- ---- --------------- -------- ------ ----------------------------------------------- --------------------- 
+0      _conv1_Conv_output_0                  1    Conv2D          56456    320    I: input_output                                 f32(1x28x28x1) (33)   
+                                                                                  S: _conv1_Conv_output_0_scratch0                                      
+                                                                                  W: _conv1_Conv_output_0_weights                 f32(8x3x3x1) (12)     
+                                                                                  W: _conv1_Conv_output_0_bias                    f32(8) (9)            
+                                                                                  O: _conv1_Conv_output_0_output                  f32(1x28x28x8) (10)   
+------ ------------------------------------- ---- --------------- -------- ------ ----------------------------------------------- --------------------- 
+1      _relu_LeakyRelu_output_0              2    Nonlinearity    18816    0      I: _conv1_Conv_output_0_output                  f32(1x28x28x8) (10)   
+                                                                                  O: _relu_LeakyRelu_output_0_output              f32(1x28x28x8) (32)   
+------ ------------------------------------- ---- --------------- -------- ------ ----------------------------------------------- --------------------- 
+2      _conv2_Conv_output_0                  5    Conv2D          238340   1168   I: _relu_LeakyRelu_output_0_output              f32(1x28x28x8) (32)   
+                                                                                  S: _conv2_Conv_output_0_scratch0                                      
+                                                                                  S: _conv2_Conv_output_0_scratch1                                      
+                                                                                  W: _conv2_Conv_output_0_weights                 f32(4x3x3x8) (17)     
+                                                                                  W: _conv2_Conv_output_0_bias                    f32(4) (13)           
+                                                                                  O: _conv2_Conv_output_0_output                  f32(1x14x14x4) (14)   
+------ ------------------------------------- ---- --------------- -------- ------ ----------------------------------------------- --------------------- 
+3      _bn2d_1_BatchNormalization_output_0   6    ScaleBias       1568     32     I: _conv2_Conv_output_0_output                  f32(1x14x14x4) (14)   
+                                                                                  W: _bn2d_1_BatchNormalization_output_0_scale    f32(4) (5)            
+                                                                                  W: _bn2d_1_BatchNormalization_output_0_bias     f32(4) (3)            
+                                                                                  O: _bn2d_1_BatchNormalization_output_0_output   f32(1x14x14x4) (4)    
+------ ------------------------------------- ---- --------------- -------- ------ ----------------------------------------------- --------------------- 
+4      _conv3_Conv_output_0                  9    Conv2D          7841     148    I: _bn2d_1_BatchNormalization_output_0_output   f32(1x14x14x4) (4)    
+                                                                                  S: _conv3_Conv_output_0_scratch0                                      
+                                                                                  S: _conv3_Conv_output_0_scratch1                                      
+                                                                                  W: _conv3_Conv_output_0_weights                 f32(1x3x3x4) (22)     
+                                                                                  W: _conv3_Conv_output_0_bias                    f32(1) (18)           
+                                                                                  O: _conv3_Conv_output_0_output                  f32(1x7x7x1) (19)     
+------ ------------------------------------- ---- --------------- -------- ------ ----------------------------------------------- --------------------- 
+5      _bn2d_2_BatchNormalization_output_0   10   ScaleBias       98       8      I: _conv3_Conv_output_0_output                  f32(1x7x7x1) (19)     
+                                                                                  W: _bn2d_2_BatchNormalization_output_0_scale    f32(1) (8)            
+                                                                                  W: _bn2d_2_BatchNormalization_output_0_bias     f32(1) (6)            
+                                                                                  O: _bn2d_2_BatchNormalization_output_0_output   f32(1x7x7x1) (7)      
+------ ------------------------------------- ---- --------------- -------- ------ ----------------------------------------------- --------------------- 
+6      _flatten_Flatten_output_0_to_chlast   11   Transpose       24       0      I: _bn2d_2_BatchNormalization_output_0_output   f32(1x7x7x1) (7)      
+                                                                                  O: _flatten_Flatten_output_0_to_chlast_output   f32(1x1x7x7) (29)     
+------ ------------------------------------- ---- --------------- -------- ------ ----------------------------------------------- --------------------- 
+7      _fc1_Gemm_output_0                    12   Dense           800      3200   I: _flatten_Flatten_output_0_to_chlast_output   f32(1x1x7x7) (29)     
+                                                                                  W: _fc1_Gemm_output_0_weights                   f32(16x49) (25)       
+                                                                                  W: _fc1_Gemm_output_0_bias                      f32(16) (23)          
+                                                                                  O: _fc1_Gemm_output_0_output                    f32(1x16) (24)        
+------ ------------------------------------- ---- --------------- -------- ------ ----------------------------------------------- --------------------- 
+8      _relu_3_LeakyRelu_output_0            13   Nonlinearity    48       0      I: _fc1_Gemm_output_0_output                    f32(1x16) (24)        
+                                                                                  O: _relu_3_LeakyRelu_output_0_output            f32(1x16) (30)        
+------ ------------------------------------- ---- --------------- -------- ------ ----------------------------------------------- --------------------- 
+9      _fc2_Gemm_output_0                    15   Dense           170      680    I: _relu_3_LeakyRelu_output_0_output            f32(1x16) (30)        
+                                                                                  W: _fc2_Gemm_output_0_weights                   f32(10x16) (28)       
+                                                                                  W: _fc2_Gemm_output_0_bias                      f32(10) (26)          
+                                                                                  O: _fc2_Gemm_output_0_output                    f32(1x10) (27)        
+------ ------------------------------------- ---- --------------- -------- ------ ----------------------------------------------- --------------------- 
+10     _relu_4_LeakyRelu_output_0            16   Nonlinearity    30       0      I: _fc2_Gemm_output_0_output                    f32(1x10) (27)        
+                                                                                  O: _relu_4_LeakyRelu_output_0_output            f32(1x10) (31)        
+------ ------------------------------------- ---- --------------- -------- ------ ----------------------------------------------- --------------------- 
+11     _bn1d_2_BatchNormalization_output_0   17   ScaleBias       20       80     I: _relu_4_LeakyRelu_output_0_output            f32(1x10) (31)        
+                                                                                  W: _bn1d_2_BatchNormalization_output_0_scale    f32(10) (2)           
+                                                                                  W: _bn1d_2_BatchNormalization_output_0_bias     f32(10) (0)           
+                                                                                  O: _bn1d_2_BatchNormalization_output_0_output   f32(1x10) (1)         
+------ ------------------------------------- ---- --------------- -------- ------ ----------------------------------------------- --------------------- 
+12     output_softmax                        18   Nonlinearity    150      0      I: _bn1d_2_BatchNormalization_output_0_output   f32(1x10) (1)         
+                                                                                  O: output_softmax_output                        f32(1x10) (35)        
+------ ------------------------------------- ---- --------------- -------- ------ ----------------------------------------------- --------------------- 
+13     output                                19   Nonlinearity    100      0      I: output_softmax_output                        f32(1x10) (35)        
+                                                                                  O: output_output                                f32(1x10) (34)        
+------ ------------------------------------- ---- --------------- -------- ------ ----------------------------------------------- --------------------- 
+
+
+
+Number of operations per c-layer
+------- ------ -------------------------------------------- --------- -------------- 
+c_id    m_id   name (type)                                        #op           type 
+------- ------ -------------------------------------------- --------- -------------- 
+0       1      _conv1_Conv_output_0 (Conv2D)                   56,456   smul_f32_f32 
+1       2      _relu_LeakyRelu_output_0 (Nonlinearity)         18,816     op_f32_f32 
+2       5      _conv2_Conv_output_0 (Conv2D)                  238,340   smul_f32_f32 
+3       6      _bn2d_1_BatchNorma..n_output_0 (ScaleBias)       1,568   smul_f32_f32 
+4       9      _conv3_Conv_output_0 (Conv2D)                    7,841   smul_f32_f32 
+5       10     _bn2d_2_BatchNorma..n_output_0 (ScaleBias)          98   smul_f32_f32 
+6       11     _flatten_Flatten_o.._to_chlast (Transpose)          24   smul_f32_f32 
+7       12     _fc1_Gemm_output_0 (Dense)                         800   smul_f32_f32 
+8       13     _relu_3_LeakyRelu_output_0 (Nonlinearity)           48     op_f32_f32 
+9       15     _fc2_Gemm_output_0 (Dense)                         170   smul_f32_f32 
+10      16     _relu_4_LeakyRelu_output_0 (Nonlinearity)           30     op_f32_f32 
+11      17     _bn1d_2_BatchNorma..n_output_0 (ScaleBias)          20   smul_f32_f32 
+12      18     output_softmax (Nonlinearity)                      150     op_f32_f32 
+13      19     output (Nonlinearity)                              100     op_f32_f32 
+------- ------ -------------------------------------------- --------- -------------- 
+total                                                         324,461 
+
+Number of operation types
+---------------- --------- ----------- 
+operation type           #           % 
+---------------- --------- ----------- 
+smul_f32_f32       305,317       94.1% 
+op_f32_f32          19,144        5.9% 
+
+Complexity report (model)
+------ ------------------------------------- ------------------------- ------------------------- ------ 
+m_id   name                                  c_macc                    c_rom                     c_id   
+------ ------------------------------------- ------------------------- ------------------------- ------ 
+12     fc1_weight                            |                  0.2%   ||||||||||||||||  56.8%   [7]    
+15     fc2_weight                            |                  0.1%   ||||              12.1%   [9]    
+1      _conv1_Conv_output_0                  ||||              17.4%   ||                 5.7%   [0]    
+2      _relu_LeakyRelu_output_0              ||                 5.8%   |                  0.0%   [1]    
+5      _pooling_AveragePool_output_0         ||||||||||||||||  73.5%   ||||||            20.7%   [2]    
+6      _bn2d_1_BatchNormalization_output_0   |                  0.5%   |                  0.6%   [3]    
+9      _pooling_1_AveragePool_output_0       |                  2.4%   |                  2.6%   [4]    
+10     _bn2d_2_BatchNormalization_output_0   |                  0.0%   |                  0.1%   [5]    
+11     _flatten_Flatten_output_0             |                  0.0%   |                  0.0%   [6]    
+13     _relu_3_LeakyRelu_output_0            |                  0.0%   |                  0.0%   [8]    
+16     _relu_4_LeakyRelu_output_0            |                  0.0%   |                  0.0%   [10]   
+17     _bn1d_2_BatchNormalization_output_0   |                  0.0%   |                  1.4%   [11]   
+18     output_softmax                        |                  0.0%   |                  0.0%   [12]   
+19     output                                |                  0.0%   |                  0.0%   [13]   
+------ ------------------------------------- ------------------------- ------------------------- ------ 
+macc=324,461 weights=5,636 act=28,260 ram_io=0
+ 
+ Requested memory size by section - "stm32f4" target
+ ------------------------------ -------- -------- ------- -------- 
+ module                             text   rodata    data      bss 
+ ------------------------------ -------- -------- ------- -------- 
+ NetworkRuntime1020_CM4_GCC.a     13,864        0       0        0 
+ cnn_mnist.o                         940      252   4,572      212 
+ cnn_mnist_data.o                     48       16      88        0 
+ lib (toolchain)*                  1,202       25       0        0 
+ ------------------------------ -------- -------- ------- -------- 
+ RT total**                       16,054      293   4,660      212 
+ ------------------------------ -------- -------- ------- -------- 
+ weights                               0    5,640       0        0 
+ activations                           0        0       0   28,260 
+ io                                    0        0       0        0 
+ ------------------------------ -------- -------- ------- -------- 
+ TOTAL                            16,054    5,933   4,660   28,472 
+ ------------------------------ -------- -------- ------- -------- 
+ *  toolchain objects (libm/libgcc*)
+ ** RT AI runtime objects (kernels+infrastructure)
+  
+  Summary - "stm32f4" target
+  ---------------------------------------------------
+               FLASH (ro)      %*   RAM (rw)       % 
+  ---------------------------------------------------
+  RT total         21,007   78.8%      4,872   14.7% 
+  ---------------------------------------------------
+  TOTAL            26,647             33,132         
+  ---------------------------------------------------
+  *  rt/total
+
+
+Generated files (7)
+---------------------------------------------------------------------- 
+C:\Users\bkgr4\.stm32cubemx\cnn_mnist_output\cnn_mnist_data_params.h   
+C:\Users\bkgr4\.stm32cubemx\cnn_mnist_output\cnn_mnist_data_params.c   
+C:\Users\bkgr4\.stm32cubemx\cnn_mnist_output\cnn_mnist_data.h          
+C:\Users\bkgr4\.stm32cubemx\cnn_mnist_output\cnn_mnist_data.c          
+C:\Users\bkgr4\.stm32cubemx\cnn_mnist_output\cnn_mnist_config.h        
+C:\Users\bkgr4\.stm32cubemx\cnn_mnist_output\cnn_mnist.h               
+C:\Users\bkgr4\.stm32cubemx\cnn_mnist_output\cnn_mnist.c               
