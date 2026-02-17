@@ -25,11 +25,12 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "Point.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 typedef StaticTask_t osStaticThreadDef_t;
+typedef StaticQueue_t osStaticMessageQDef_t;
 /* USER CODE BEGIN PTD */
 
 /* USER CODE END PTD */
@@ -60,6 +61,29 @@ const osThreadAttr_t mainTask_attributes = {
   .stack_size = sizeof(defaultTaskBuffer),
   .priority = (osPriority_t) osPriorityNormal,
 };
+/* Definitions for touchPanelTask */
+osThreadId_t touchPanelTaskHandle;
+uint32_t touchPanelTaskBuffer[ 512 ];
+osStaticThreadDef_t touchPanelTaskControlBlock;
+const osThreadAttr_t touchPanelTask_attributes = {
+  .name = "touchPanelTask",
+  .cb_mem = &touchPanelTaskControlBlock,
+  .cb_size = sizeof(touchPanelTaskControlBlock),
+  .stack_mem = &touchPanelTaskBuffer[0],
+  .stack_size = sizeof(touchPanelTaskBuffer),
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for PointQueue */
+osMessageQueueId_t PointQueueHandle;
+uint8_t PointQueueBuffer[ 16 * sizeof( Point ) ];
+osStaticMessageQDef_t PointQueueControlBlock;
+const osMessageQueueAttr_t PointQueue_attributes = {
+  .name = "PointQueue",
+  .cb_mem = &PointQueueControlBlock,
+  .cb_size = sizeof(PointQueueControlBlock),
+  .mq_mem = &PointQueueBuffer,
+  .mq_size = sizeof(PointQueueBuffer)
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -67,6 +91,7 @@ const osThreadAttr_t mainTask_attributes = {
 /* USER CODE END FunctionPrototypes */
 
 void mainTaskHandler(void *argument);
+extern void touchPanelTaskHandler(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -137,6 +162,10 @@ void MX_FREERTOS_Init(void) {
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
 
+  /* Create the queue(s) */
+  /* creation of PointQueue */
+  PointQueueHandle = osMessageQueueNew (16, sizeof(Point), &PointQueue_attributes);
+
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
@@ -144,6 +173,9 @@ void MX_FREERTOS_Init(void) {
   /* Create the thread(s) */
   /* creation of mainTask */
   mainTaskHandle = osThreadNew(mainTaskHandler, NULL, &mainTask_attributes);
+
+  /* creation of touchPanelTask */
+  touchPanelTaskHandle = osThreadNew(touchPanelTaskHandler, NULL, &touchPanelTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
