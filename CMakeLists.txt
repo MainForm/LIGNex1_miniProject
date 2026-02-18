@@ -54,6 +54,11 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     ${PROJECT_SOURCE_DIR}/App/Tasks/mainTask/Src/mainTask.cpp
     ${PROJECT_SOURCE_DIR}/App/Tasks/touchPanelTask/Src/touchPanelTask.cpp
+    ${PROJECT_SOURCE_DIR}/App/Tasks/mnistTask/Src/mnistTask.cpp
+
+    ${PROJECT_SOURCE_DIR}/App/Interrupts/Src/Interrupts.cpp
+
+    ${PROJECT_SOURCE_DIR}/Middlewares/MNIST_model/Src/MNIST_model.cpp
 )
 
 # Add include paths
@@ -63,11 +68,21 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
 
     ${PROJECT_SOURCE_DIR}/App/Tasks/mainTask/Inc
     ${PROJECT_SOURCE_DIR}/App/Tasks/touchPanelTask/Inc
+    ${PROJECT_SOURCE_DIR}/App/Tasks/mnistTask/Inc
+
+    ${PROJECT_SOURCE_DIR}/App/Interrupts/Inc
+
+    ${PROJECT_SOURCE_DIR}/Middlewares/MNIST_model/Inc
 )
 
 # Add project symbols (macros)
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined symbols
+)
+
+# Enable float formatting in printf (newlib-nano)
+target_link_options(${CMAKE_PROJECT_NAME} PRIVATE
+    "LINKER:-u,_printf_float"
 )
 
 # Remove wrong libob.a library dependency when using cpp files

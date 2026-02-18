@@ -26,6 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "Point.h"
+#include "MNIST_image.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -73,6 +74,18 @@ const osThreadAttr_t touchPanelTask_attributes = {
   .stack_size = sizeof(touchPanelTaskBuffer),
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for mnistTask */
+osThreadId_t mnistTaskHandle;
+uint32_t mnistTaskBuffer[ 2048 ];
+osStaticThreadDef_t mnistTaskControlBlock;
+const osThreadAttr_t mnistTask_attributes = {
+  .name = "mnistTask",
+  .cb_mem = &mnistTaskControlBlock,
+  .cb_size = sizeof(mnistTaskControlBlock),
+  .stack_mem = &mnistTaskBuffer[0],
+  .stack_size = sizeof(mnistTaskBuffer),
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* Definitions for PointQueue */
 osMessageQueueId_t PointQueueHandle;
 uint8_t PointQueueBuffer[ 16 * sizeof( Point ) ];
@@ -84,6 +97,17 @@ const osMessageQueueAttr_t PointQueue_attributes = {
   .mq_mem = &PointQueueBuffer,
   .mq_size = sizeof(PointQueueBuffer)
 };
+/* Definitions for MNIST_Queue */
+osMessageQueueId_t MNIST_QueueHandle;
+uint8_t MNIST_QueueBuffer[ 16 * sizeof( MNIST_image ) ];
+osStaticMessageQDef_t MNIST_QueueControlBlock;
+const osMessageQueueAttr_t MNIST_Queue_attributes = {
+  .name = "MNIST_Queue",
+  .cb_mem = &MNIST_QueueControlBlock,
+  .cb_size = sizeof(MNIST_QueueControlBlock),
+  .mq_mem = &MNIST_QueueBuffer,
+  .mq_size = sizeof(MNIST_QueueBuffer)
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -92,6 +116,7 @@ const osMessageQueueAttr_t PointQueue_attributes = {
 
 void mainTaskHandler(void *argument);
 extern void touchPanelTaskHandler(void *argument);
+extern void mnistTaskHandler(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -166,6 +191,9 @@ void MX_FREERTOS_Init(void) {
   /* creation of PointQueue */
   PointQueueHandle = osMessageQueueNew (16, sizeof(Point), &PointQueue_attributes);
 
+  /* creation of MNIST_Queue */
+  MNIST_QueueHandle = osMessageQueueNew (16, sizeof(MNIST_image), &MNIST_Queue_attributes);
+
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
@@ -176,6 +204,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of touchPanelTask */
   touchPanelTaskHandle = osThreadNew(touchPanelTaskHandler, NULL, &touchPanelTask_attributes);
+
+  /* creation of mnistTask */
+  mnistTaskHandle = osThreadNew(mnistTaskHandler, NULL, &mnistTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */

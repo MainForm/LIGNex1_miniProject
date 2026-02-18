@@ -1059,44 +1059,44 @@
   ],
   "environment": {
     "generated_model": {
-      "generated_time": "2026-02-19T05:15:23+0900",
+      "generated_time": "2026-02-19T06:36:09+0900",
       "model_files": [
         {
           "name": "cnn_mnist_data_params.h",
-          "signature": "0xbd3b4d320be72cbd650df60d015d995c"
+          "signature": "0x4a9f2320f668d92908ffd0b0e417b29c"
         },
         {
           "name": "cnn_mnist_data_params.c",
-          "signature": "0x84f4fcb9eeafca490007b75ddbfb93f1"
+          "signature": "0x495778131f112a45b3ae88561cb293e3"
         },
         {
           "name": "cnn_mnist_data.h",
-          "signature": "0xbde199f0b42be3c108ed217c43934009"
+          "signature": "0x928269bbaef7e659ae5a55833383f8f9"
         },
         {
           "name": "cnn_mnist_data.c",
-          "signature": "0x7f72fa3c4c704d3cbdcc56c5162c5c43"
+          "signature": "0x4b8efbec12e68cbecdb6eea9792cf83f"
         },
         {
           "name": "cnn_mnist_config.h",
-          "signature": "0xda8adc33b3b0e7bb56f7289e0d1a7d93"
+          "signature": "0x4c882bd2ea2824c171386808706ff1bb"
         },
         {
           "name": "cnn_mnist.h",
-          "signature": "0xb2315ffb0532673b93f1907010846765"
+          "signature": "0x6382f6d0a10c8ff6b2967dbc4265187a"
         },
         {
           "name": "cnn_mnist.c",
-          "signature": "0x675bcdbaf8b2b28a58fd7002ea2c7b21"
+          "signature": "0x12fde620c05210e8201fe74d111db4f3"
         }
       ],
       "name": "cnn_mnist"
     },
-    "network_signature": "0xc6f204edca069c8d",
+    "network_signature": "0x786c46aa9b74f6fb",
     "test_name": "",
     "tools": [
       {
-        "arguments": "generate --target stm32f4 --name cnn_mnist -m C:/Users/bkgr4/OneDrive/Documents/VScode/STM32/F429I_DISC1_miniProject/models/MNIST/models/model.onnx --compression none --verbosity 1 --workspace C:/Users/bkgr4/AppData/Local/Temp/mxAI_workspace601869748990007732827775820385551 --output C:/Users/bkgr4/.stm32cubemx/cnn_mnist_output",
+        "arguments": "generate --target stm32f4 --name cnn_mnist -m C:/Users/bkgr4/OneDrive/Documents/VScode/STM32/F429I_DISC1_miniProject/models/MNIST/models/model.onnx --compression none --verbosity 1 --workspace C:/Users/bkgr4/AppData/Local/Temp/mxAI_workspace6503295817340013361141731230736827 --output C:/Users/bkgr4/.stm32cubemx/cnn_mnist_output",
         "environment": [
           "STATS_TYPE=X-CUBE-AI"
         ],

@@ -1,6 +1,9 @@
 #include "mainTask.hpp"
 #include "FreeRTOS_Handles.h"
 #include "Point.h"
+#include "MNIST_image.h"
+
+#include "Interrupts.hpp"
 
 // Include the peripherals
 #include "cmsis_os2.h"
@@ -10,6 +13,8 @@
 #include "fmc.h"
 
 #include "IS42S16400J_7TL.h"
+
+#include <cstring>
 
 TFT_LCD::ILI9341 lcd(
     TFT_LCD::ILI9341_Config{
@@ -23,6 +28,7 @@ TFT_LCD::ILI9341 lcd(
 );
 
 float inputData[INPUT_HEIGHT][INPUT_WIDTH] = {0. ,};
+bool bBtnPushed = false;
 
 void drawFrame(){
     for(uint32_t iy = 0; iy < INPUT_HEIGHT;iy++){
@@ -40,10 +46,16 @@ Point convertToImgSize(Point pt){
     return pt;
 }
 
+void BluePushButton_Clicked(){
+    bBtnPushed = true;
+}
+
 extern "C"
 void mainTaskHandler(void *argument){
     Point recvPoint;
     uint8_t mqPriority;
+
+    GPIO_PortA0_Callback = BluePushButton_Clicked;
 
     // init external SDRAM
     BSP_SDRAM_IS42S16400J_7TL_Init(&hsdram1,REFRESH_COUNT);
@@ -65,6 +77,16 @@ void mainTaskHandler(void *argument){
         }
         drawFrame();
         lcd.updateFrame();
+
+        if(bBtnPushed == true){
+            bBtnPushed = false;
+            MNIST_image imgData;
+            memcpy(imgData.data,inputData,28*28 * sizeof(float));
+
+            osMessageQueuePut(MNIST_QueueHandle,&imgData,osPriorityIdle,10);
+
+            memset(inputData,0,28*28 * sizeof(float));
+        }
 
         osDelay(16);
     }
