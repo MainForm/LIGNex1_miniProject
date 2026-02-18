@@ -1,4 +1,5 @@
 #include "mainTask.hpp"
+#include "FreeRTOS_Handles.h"
 #include "Point.h"
 
 // Include the peripherals

@@ -1,6 +1,8 @@
 #include "touchPanelTask.hpp"
+#include "FreeRTOS_Handles.h"
 
-#include "mainTask.hpp"
+#include "ILI9341.hpp"
+
 #include "cmsis_os2.h"
 
 #include "i2c.h"

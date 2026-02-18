@@ -17,6 +17,4 @@
 
 #define IMG_RECT_SIZE               (8)
 
-extern osMessageQueueId_t PointQueueHandle;
-
 #endif // __APP_MAIN_TASK_H__
