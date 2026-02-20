@@ -7,3 +7,6 @@
 [submodule "models/MNIST"]
 	path = models/MNIST
 	url = https://github.com/MainForm/MNIST_Model.git
+[submodule "Drivers/CharacterLCD"]
+	path = Drivers/CharacterLCD
+	url = https://github.com/MainForm/STM32_CharacterLCD.git
