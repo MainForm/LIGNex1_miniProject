@@ -43,6 +43,7 @@ add_subdirectory(cmake/stm32cubemx)
 add_subdirectory(Drivers/ILI9341)
 add_subdirectory(Drivers/STMPE811)
 add_subdirectory(Drivers/SDRAM)
+add_subdirectory(Drivers/CharacterLCD)
 
 # Link directories setup
 target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
@@ -57,6 +58,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/App/Tasks/mnistTask/Src/mnistTask.cpp
 
     ${PROJECT_SOURCE_DIR}/App/Interrupts/Src/Interrupts.cpp
+
+    ${PROJECT_SOURCE_DIR}/App/Common/Src/MutexGuard.cpp
 
     ${PROJECT_SOURCE_DIR}/Middlewares/MNIST_model/Src/MNIST_model.cpp
 )
@@ -96,4 +99,5 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     ili9341
     stmpe811
     sdramIS42S16400J
+    character_lcd
 )

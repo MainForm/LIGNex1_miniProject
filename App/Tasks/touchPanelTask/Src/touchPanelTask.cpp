@@ -9,6 +9,8 @@
 
 #include "Point.h"
 
+#include "MutexGuard.hpp"
+
 TFT_LCD::STMPE811 touchPanel(
     &hi2c3
 );
@@ -26,21 +28,32 @@ Point convertToLCDSize(Point pt){
 
 extern "C"
 void touchPanelTaskHandler(void *argument){
-    touchPanel.initalize();
+
+    {
+        AppCommon::MutexGuard mutexLock(I2C3_mutexHandle);
+
+        touchPanel.initalize();
+    }
 
     for(;;){
-        if(touchPanel.isTouched()){
-            Point curPoint;
+        {
+            AppCommon::MutexGuard mutexLock(I2C3_mutexHandle);
 
-            touchPanel.getTouchedPoint((uint32_t*)&curPoint.x, (uint32_t*)&curPoint.y);
+            if(touchPanel.isTouched()){
+                Point curPoint;
 
-            Point lcdPoint = convertToLCDSize(curPoint);
-            osMessageQueuePut(
-                PointQueueHandle,
-                &lcdPoint,
-                osPriorityIdle, 
-                0xFFFF
-            );
+                touchPanel.getTouchedPoint((uint32_t*)&curPoint.x, (uint32_t*)&curPoint.y);
+
+                mutexLock.unlock();
+                
+                Point lcdPoint = convertToLCDSize(curPoint);
+                osMessageQueuePut(
+                    PointQueueHandle,
+                    &lcdPoint,
+                    osPriorityIdle, 
+                    0xFFFF
+                );
+            }
         }
         osDelay(16);
     }

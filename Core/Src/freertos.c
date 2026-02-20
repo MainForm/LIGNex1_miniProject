@@ -32,6 +32,7 @@
 /* Private typedef -----------------------------------------------------------*/
 typedef StaticTask_t osStaticThreadDef_t;
 typedef StaticQueue_t osStaticMessageQDef_t;
+typedef StaticSemaphore_t osStaticMutexDef_t;
 /* USER CODE BEGIN PTD */
 
 /* USER CODE END PTD */
@@ -108,6 +109,14 @@ const osMessageQueueAttr_t MNIST_Queue_attributes = {
   .mq_mem = &MNIST_QueueBuffer,
   .mq_size = sizeof(MNIST_QueueBuffer)
 };
+/* Definitions for I2C3_mutex */
+osMutexId_t I2C3_mutexHandle;
+osStaticMutexDef_t I2C3_mutexControlBlock;
+const osMutexAttr_t I2C3_mutex_attributes = {
+  .name = "I2C3_mutex",
+  .cb_mem = &I2C3_mutexControlBlock,
+  .cb_size = sizeof(I2C3_mutexControlBlock),
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -174,6 +183,9 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
+  /* Create the mutex(es) */
+  /* creation of I2C3_mutex */
+  I2C3_mutexHandle = osMutexNew(&I2C3_mutex_attributes);
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */

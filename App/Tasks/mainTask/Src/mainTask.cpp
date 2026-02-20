@@ -81,7 +81,7 @@ void mainTaskHandler(void *argument){
         if(bBtnPushed == true){
             bBtnPushed = false;
             MNIST_image imgData;
-            memcpy(imgData.data,inputData,28*28 * sizeof(float));
+            memcpy(imgData.data,inputData,28 * 28 * sizeof(float));
 
             osMessageQueuePut(MNIST_QueueHandle,&imgData,osPriorityIdle,10);
 
