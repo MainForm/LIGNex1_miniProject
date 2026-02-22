@@ -16,6 +16,9 @@
 
 #include <cstring>
 
+#define MAX(n1,n2)  (n1 > n2 ? n1 : n2)
+#define MIN(n1,n2)  (n1 > n2 ? n2 : n1)
+
 TFT_LCD::ILI9341 lcd(
     TFT_LCD::ILI9341_Config{
         .hspi = &hspi5,
@@ -69,10 +72,14 @@ void mainTaskHandler(void *argument){
 
             if(imgPoint.y < INPUT_HEIGHT - 1 && imgPoint.x < INPUT_WIDTH - 1
                 && imgPoint.y > 0 && imgPoint.x > 0){
-                inputData[imgPoint.y][imgPoint.x] = 1.0f;
-                inputData[imgPoint.y + 1][imgPoint.x] = 1.0f;
-                inputData[imgPoint.y][imgPoint.x + 1] = 1.0f;
-                inputData[imgPoint.y + 1][imgPoint.x + 1] = 1.0f;
+
+                for(int32_t iy = -1;iy <= 1;iy++){
+                    for(int32_t ix = -1;ix <= 1; ix++){
+                        inputData[imgPoint.y + iy][imgPoint.x + ix] = MIN(1.0f, inputData[imgPoint.y + iy][imgPoint.x + ix] + 0.25f);
+                    }
+                }
+
+                inputData[imgPoint.y][imgPoint.x] = MIN(1.0f, inputData[imgPoint.y][imgPoint.x] + 0.5f);
             }
         }
         drawFrame();

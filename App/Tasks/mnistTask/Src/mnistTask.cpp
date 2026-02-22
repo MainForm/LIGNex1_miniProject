@@ -52,7 +52,9 @@ void mnistTaskHandler(void *argument){
             if(mnist.run(input,output) > 0){
                 sprintf((char*)Message,"result : %ld",output);
                 HAL_UART_Transmit(&huart1, Message, strlen((char*)Message), HAL_MAX_DELAY);
-                HAL_UART_Transmit(&huart1, (uint8_t*)'\n', 1, HAL_MAX_DELAY);
+
+                HAL_UART_Transmit(&huart1, (uint8_t*)"\r\n", 2, HAL_MAX_DELAY);
+
                 {
                     AppCommon::MutexGuard mutexLock(I2C3_mutexHandle);
 
