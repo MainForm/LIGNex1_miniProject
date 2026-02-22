@@ -212,4 +212,6 @@ build
 mx.scratch
 !.settings
 
+!Middlewares/ST/AI/Lib/NetworkRuntime1020_CM4_GCC.a
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,c++,cmake,windows,linux,macos,eclipse
