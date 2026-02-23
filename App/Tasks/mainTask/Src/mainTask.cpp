@@ -7,6 +7,7 @@
 
 // Include the peripherals
 #include "cmsis_os2.h"
+#include "font/fonts.hpp"
 #include "spi.h"
 #include "ltdc.h"
 #include "dma2d.h"
@@ -32,13 +33,24 @@ TFT_LCD::ILI9341 lcd(
 
 float inputData[INPUT_HEIGHT][INPUT_WIDTH] = {0. ,};
 bool bBtnPushed = false;
+int32_t MNIST_result = -1;
 
 void drawFrame(){
+    char message[32] = "";
+
     for(uint32_t iy = 0; iy < INPUT_HEIGHT;iy++){
         for(uint32_t ix = 0; ix < INPUT_WIDTH;ix++){
             TFT_LCD::Pixel curPixel(0x1F * (float)inputData[iy][ix], 0x2F * (float)inputData[iy][ix], 0x1F * (float)inputData[iy][ix]);
             lcd.drawRectangle(ix * IMG_RECT_SIZE,iy * IMG_RECT_SIZE, IMG_RECT_SIZE - 1, IMG_RECT_SIZE - 1, 0xFFFF - curPixel,false);
         }
+    }
+    
+    if(MNIST_result >= 0){
+        uint32_t startY = INPUT_HEIGHT * IMG_RECT_SIZE + 20;
+        sprintf(message,"result : %ld",MNIST_result);
+
+        lcd.drawRectangle(10,startY, 240, Font24.Height, 0x0000,false);
+        lcd.putText(message, 10,startY, Font24, 0xFFFF,false);
     }
 }
 
@@ -75,11 +87,11 @@ void mainTaskHandler(void *argument){
 
                 for(int32_t iy = -1;iy <= 1;iy++){
                     for(int32_t ix = -1;ix <= 1; ix++){
-                        inputData[imgPoint.y + iy][imgPoint.x + ix] = MIN(1.0f, inputData[imgPoint.y + iy][imgPoint.x + ix] + 0.25f);
+                        inputData[imgPoint.y + iy][imgPoint.x + ix] = MIN(1.0f, inputData[imgPoint.y + iy][imgPoint.x + ix] + 0.3f);
                     }
                 }
 
-                inputData[imgPoint.y][imgPoint.x] = MIN(1.0f, inputData[imgPoint.y][imgPoint.x] + 0.5f);
+                inputData[imgPoint.y][imgPoint.x] = MIN(1.0f, inputData[imgPoint.y][imgPoint.x] + 1.0f);
             }
         }
         drawFrame();

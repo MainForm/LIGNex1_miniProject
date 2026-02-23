@@ -27,6 +27,8 @@ MNIST_image inputImg;
 
 CharacterLCD::LCD_I2C clcd(&hi2c3);
 
+extern int32_t MNIST_result;
+
 extern "C"
 void mnistTaskHandler(void *argument){
     uint8_t mqPriority;
@@ -64,6 +66,8 @@ void mnistTaskHandler(void *argument){
                     clcd.setCursor(0, 1);
                     clcd.print((char*)Message);
                 }
+
+                MNIST_result = output;
             }
         }
     }
